@@ -3,13 +3,96 @@
  */
 
 const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
-const EXCHANGE_LOGOS = {
-  Binance: "🟡",
-  Coinbase: "🔵",
-  OKX: "⚫",
-  Bybit: "🟠",
-  Kraken: "🟣",
+
+// ── SVG Icons (replace all emoji) ──
+
+const ICONS = {
+  vault: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><rect x="3" y="3" width="18" height="4" rx="2"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="14" x2="13" y2="14"/><circle cx="12" cy="17" r="1.5"/></svg>`,
+  arrowUpRight: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>`,
+  arrowDownRight: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 7l10 10"/><path d="M17 7v10H7"/></svg>`,
+  wallet: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5z"/><path d="M16 12a1 1 0 1 0 2 0 1 1 0 1 0-2 0"/></svg>`,
+  activity: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+  coins: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="M16.71 13.88l.7.71-2.82 2.82"/></svg>`,
 };
+
+// ── Crypto Token Icons CDN ──
+const CRYPTO_ICON_CDN = 'https://cdn.jsdelivr.net/npm/cryptocurrency-icons@0.18.1/svg/color';
+
+// ── Exchange Brand Logos (accurate inline SVG) ──
+
+const EXCHANGE_BRAND = {
+  // Binance: 4-diamond rotated pattern (official mark)
+  Binance: {
+    color: '#f3ba2f',
+    svg: `<svg width="28" height="28" viewBox="0 0 126 126" fill="#f3ba2f">
+      <path d="M38.2 53.3L63 28.5l24.8 24.8 14.4-14.4L63 0 24 39l14.2 14.3zM0 63l14.4-14.4L28.8 63l-14.4 14.4zM38.2 72.7L63 97.5l24.8-24.8 14.5 14.4L63 126.1 24 87l-.1-.2 14.3-14.1zM97.2 63l14.4-14.4L126 63l-14.4 14.4z"/>
+      <path d="M77.6 63L63 48.4 52.2 59.1l-1.2 1.3L48.4 63 63 77.6 77.6 63z"/>
+    </svg>`
+  },
+  // Coinbase: Circle with inner square cutout (official C mark)
+  Coinbase: {
+    color: '#0052ff',
+    svg: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="14" r="14" fill="#0052ff"/>
+      <path d="M14 5.6a8.4 8.4 0 1 0 0 16.8 8.4 8.4 0 0 0 0-16.8zm-1.4 5.6h2.8a.7.7 0 0 1 .7.7v4.2a.7.7 0 0 1-.7.7h-2.8a.7.7 0 0 1-.7-.7v-4.2a.7.7 0 0 1 .7-.7z" fill="#fff"/>
+    </svg>`
+  },
+  // OKX: 5-square grid pattern (official mark)
+  OKX: {
+    color: '#ffffff',
+    svg: `<svg width="24" height="24" viewBox="0 0 24 24" fill="#fff">
+      <rect x="1" y="1" width="6.5" height="6.5" rx="1.2"/>
+      <rect x="9" y="9" width="6.5" height="6.5" rx="1.2"/>
+      <rect x="16.5" y="1" width="6.5" height="6.5" rx="1.2"/>
+      <rect x="1" y="16.5" width="6.5" height="6.5" rx="1.2"/>
+      <rect x="16.5" y="16.5" width="6.5" height="6.5" rx="1.2"/>
+    </svg>`
+  },
+  // Bybit: Arrow/triangle mark
+  Bybit: {
+    color: '#f7a600',
+    svg: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill="#f7a600"/>
+      <path d="M8 8h5v5H8V8zm7 0h5v12h-5V8zM8 15h5v5H8v-5z" fill="#fff"/>
+    </svg>`
+  },
+  // Kraken: K-shape / tentacle mark
+  Kraken: {
+    color: '#7b61ff',
+    svg: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect width="28" height="28" rx="6" fill="#7b61ff"/>
+      <path d="M9 7h3.5v5.5L17 7h4l-5.5 6.5L21 21h-4l-4.5-6v6H9V7z" fill="#fff"/>
+    </svg>`
+  },
+};
+
+function exchangeLogo(name) {
+  const ex = EXCHANGE_BRAND[name];
+  if (!ex) {
+    return `<div class="card__logo" style="background:rgba(99,102,241,0.12);border-color:rgba(99,102,241,0.25);color:#6366f1">${name.charAt(0)}</div>`;
+  }
+  return `<div class="card__logo" style="background:${hexToRgba(ex.color,0.12)};border-color:${hexToRgba(ex.color,0.25)}">${ex.svg}</div>`;
+}
+
+// Token icon: load from CDN, fallback to colored letter circle
+function tokenIcon(symbol) {
+  const lower = (symbol || '').toLowerCase();
+  return `<span class="token__icon">
+    <img src="${CRYPTO_ICON_CDN}/${lower}.svg"
+         width="18" height="18"
+         alt="${symbol}"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+    /><span class="token__icon-fallback" style="display:none">${(symbol || '?').charAt(0)}</span>
+  </span>`;
+}
+
+// Utility: hex to rgba
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
 
 // ── Formatters ──
 
@@ -70,14 +153,13 @@ function renderSkeleton() {
 }
 
 function renderCard(ex) {
-  const logo = EXCHANGE_LOGOS[ex.name] || "🏦";
-  const initial = ex.name.charAt(0);
+  const logo = exchangeLogo(ex.name);
 
   if (ex.error) {
     return `
     <div class="card card--error">
       <div class="card__header">
-        <div class="card__logo">${initial}</div>
+        ${logo}
         <div>
           <div class="card__name">${ex.name}</div>
           <div class="card__entity">${ex.entity}</div>
@@ -92,11 +174,15 @@ function renderCard(ex) {
   const inflowPct = totalFlow > 0 ? (ex.totalInflows24hUsd / totalFlow) * 100 : 50;
   const outflowPct = 100 - inflowPct;
 
+  const inflowIcon = `<span style="color:var(--accent-green)">${ICONS.arrowUpRight}</span>`;
+  const outflowIcon = `<span style="color:var(--accent-red)">${ICONS.arrowDownRight}</span>`;
+
   const tokensHtml = ex.topTokens
     .map(
       (t) => `
     <li class="token">
       <span>
+        ${tokenIcon(t.symbol)}
         <span class="token__symbol">${t.symbol}</span>
         <span class="token__chain">${t.chain}</span>
       </span>
@@ -111,7 +197,7 @@ function renderCard(ex) {
   return `
   <div class="card">
     <div class="card__header">
-      <div class="card__logo">${logo}</div>
+      ${logo}
       <div>
         <div class="card__name">${ex.name}</div>
         <div class="card__entity">${ex.entity}</div>
@@ -120,19 +206,19 @@ function renderCard(ex) {
 
     <div class="metrics">
       <div class="metric">
-        <div class="metric__label">Total Assets</div>
+        <div class="metric__label">${ICONS.wallet} Total Assets</div>
         <div class="metric__value">${formatUsd(ex.totalAssetsUsd)}</div>
       </div>
       <div class="metric">
-        <div class="metric__label">24hr Net Flow</div>
+        <div class="metric__label">${ICONS.activity} 24hr Net Flow</div>
         <div class="metric__value ${flowClass(ex.netFlow24hUsd)}">${formatFlow(ex.netFlow24hUsd)}</div>
       </div>
     </div>
 
     <div class="flow-bar">
       <div class="flow-bar__header">
-        <span>Inflows ${formatUsd(ex.totalInflows24hUsd)}</span>
-        <span>Outflows ${formatUsd(ex.totalOutflows24hUsd)}</span>
+        <span class="flow-bar__label">${inflowIcon} Inflows ${formatUsd(ex.totalInflows24hUsd)}</span>
+        <span class="flow-bar__label">${outflowIcon} Outflows ${formatUsd(ex.totalOutflows24hUsd)}</span>
       </div>
       <div class="flow-bar__track">
         <div class="flow-bar__fill--in" style="width:${inflowPct}%"></div>
@@ -143,7 +229,7 @@ function renderCard(ex) {
     ${
       tokensHtml
         ? `<div class="tokens">
-            <div class="tokens__title">Top Holdings</div>
+            <div class="tokens__title">${ICONS.coins} Top Holdings</div>
             <ul class="tokens">${tokensHtml}</ul>
           </div>`
         : ""
