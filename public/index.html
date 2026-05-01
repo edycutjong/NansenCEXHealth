@@ -16,39 +16,128 @@
     <div class="bg-mesh__orb bg-mesh__orb--3"></div>
   </div>
 
-  <header class="header">
-    <div class="header__icon">
-      <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
-        <defs>
-          <linearGradient id="vault-grad" x1="0" y1="0" x2="52" y2="52">
-            <stop offset="0%" stop-color="#6366f1"/>
-            <stop offset="100%" stop-color="#22d3ee"/>
-          </linearGradient>
-          <filter id="vault-glow">
-            <feGaussianBlur stdDeviation="2.5" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-        <!-- Vault/Building icon -->
-        <rect x="10" y="16" width="32" height="28" rx="4" fill="url(#vault-grad)" filter="url(#vault-glow)" opacity="0.9"/>
-        <rect x="8" y="12" width="36" height="6" rx="3" fill="url(#vault-grad)" opacity="0.7"/>
-        <rect x="16" y="22" width="20" height="3" rx="1.5" fill="#fff" opacity="0.3"/>
-        <rect x="16" y="28" width="14" height="3" rx="1.5" fill="#fff" opacity="0.2"/>
-        <circle cx="26" cy="37" r="3" fill="#fff" opacity="0.25"/>
-      </svg>
-    </div>
-    <h1 class="header__title">CEX Health Monitor</h1>
-    <p class="header__subtitle">Real-time exchange balance tracking & 24hr net flow analysis — powered by Nansen</p>
-  </header>
+  <!-- ── LANDING VIEW ── -->
+  <div id="landingView" class="landing">
+    <nav class="nav">
+      <div class="nav__brand">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <defs>
+            <linearGradient id="nav-grad" x1="0" y1="0" x2="52" y2="52">
+              <stop offset="0%" stop-color="#6366f1"/>
+              <stop offset="100%" stop-color="#22d3ee"/>
+            </linearGradient>
+          </defs>
+          <rect x="10" y="16" width="32" height="28" rx="4" fill="url(#nav-grad)" opacity="0.9"/>
+          <rect x="8" y="12" width="36" height="6" rx="3" fill="url(#nav-grad)" opacity="0.7"/>
+          <rect x="16" y="22" width="20" height="3" rx="1.5" fill="#fff" opacity="0.3"/>
+          <rect x="16" y="28" width="14" height="3" rx="1.5" fill="#fff" opacity="0.2"/>
+        </svg>
+        <span>NansenCEXHealth</span>
+      </div>
+      <div class="nav__links">
+        <a href="https://github.com/edycutjong" target="_blank" class="nav__link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+      </div>
+    </nav>
 
-  <div class="status-bar" id="statusBar">
-    <span class="status-bar__dot status-bar__dot--loading" id="statusDot"></span>
-    <span id="statusText">Loading exchange data...</span>
+    <section class="hero">
+      <div class="hero__badge">
+        <span class="hero__badge-dot"></span>
+        Powered by Nansen API
+      </div>
+      <div class="hero__icon">
+        <svg width="72" height="72" viewBox="0 0 52 52" fill="none">
+          <defs>
+            <linearGradient id="vault-grad" x1="0" y1="0" x2="52" y2="52">
+              <stop offset="0%" stop-color="#6366f1"/>
+              <stop offset="100%" stop-color="#22d3ee"/>
+            </linearGradient>
+            <filter id="vault-glow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <rect x="10" y="16" width="32" height="28" rx="4" fill="url(#vault-grad)" filter="url(#vault-glow)" opacity="0.9"/>
+          <rect x="8" y="12" width="36" height="6" rx="3" fill="url(#vault-grad)" opacity="0.7"/>
+          <rect x="16" y="22" width="20" height="3" rx="1.5" fill="#fff" opacity="0.3"/>
+          <rect x="16" y="28" width="14" height="3" rx="1.5" fill="#fff" opacity="0.2"/>
+          <circle cx="26" cy="37" r="3" fill="#fff" opacity="0.25"/>
+        </svg>
+      </div>
+      <h1 class="hero__title">CEX Health Monitor</h1>
+      <p class="hero__subtitle">Real-time exchange balance tracking & 24hr net flow analysis<br>across the top centralized exchanges.</p>
+      <button class="hero__cta" id="ctaDashboard">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        Open Dashboard
+      </button>
+    </section>
+
+    <section class="features">
+      <div class="feature-card">
+        <div class="feature-card__icon feature-card__icon--blue">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5z"/><path d="M16 12a1 1 0 1 0 2 0 1 1 0 1 0-2 0"/></svg>
+        </div>
+        <h3 class="feature-card__title">Balance Tracking</h3>
+        <p class="feature-card__desc">Monitor total assets across Binance, Coinbase, OKX, Bybit & Kraken in real-time.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card__icon feature-card__icon--cyan">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3 class="feature-card__title">Net Flow Analysis</h3>
+        <p class="feature-card__desc">Track 24hr inflows & outflows to detect liquidity shifts before the market reacts.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card__icon feature-card__icon--purple">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/></svg>
+        </div>
+        <h3 class="feature-card__title">Top Holdings</h3>
+        <p class="feature-card__desc">See the top token holdings per exchange, including % allocation and chain data.</p>
+      </div>
+    </section>
+
+    <section class="stats-banner">
+      <div class="stats-banner__item">
+        <span class="stats-banner__value" data-count="5">0</span>
+        <span class="stats-banner__label">Exchanges</span>
+      </div>
+      <div class="stats-banner__item">
+        <span class="stats-banner__value" data-count="300" data-suffix="s">0</span>
+        <span class="stats-banner__label">Cache TTL</span>
+      </div>
+      <div class="stats-banner__item">
+        <span class="stats-banner__value" data-count="24" data-suffix="hr">0</span>
+        <span class="stats-banner__label">Flow Window</span>
+      </div>
+      <div class="stats-banner__item">
+        <span class="stats-banner__value" data-count="5" data-suffix="min">0</span>
+        <span class="stats-banner__label">Auto Refresh</span>
+      </div>
+    </section>
   </div>
 
-  <main class="grid" id="grid">
-    <!-- Cards injected by JS -->
-  </main>
+  <!-- ── DASHBOARD VIEW ── -->
+  <div id="dashboardView" class="dashboard" style="display:none">
+    <nav class="dash-nav">
+      <button class="dash-nav__back" id="btnBack">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        Back
+      </button>
+      <div class="dash-nav__brand">
+        <svg width="20" height="20" viewBox="0 0 52 52" fill="none"><rect x="10" y="16" width="32" height="28" rx="4" fill="#6366f1" opacity="0.7"/><rect x="8" y="12" width="36" height="6" rx="3" fill="#6366f1" opacity="0.5"/></svg>
+        CEX Health
+      </div>
+      <div class="dash-nav__status">
+        <span class="status-dot status-dot--loading" id="statusDot"></span>
+        <span id="statusText">Loading...</span>
+      </div>
+    </nav>
+
+    <main class="grid" id="grid">
+      <!-- Cards injected by JS -->
+    </main>
+  </div>
 
   <footer class="footer">
     <div class="footer__brand">
