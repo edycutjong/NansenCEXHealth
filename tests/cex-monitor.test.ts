@@ -134,6 +134,68 @@ describe("CEX Monitor", () => {
       assert.equal(result.totalAssetsUsd, 0);
       assert.ok(result.error?.includes("API Error"));
     });
+
+    it("handles missing data arrays and default fallbacks", async () => {
+      mock.method(global, "fetch", async (url: any) => {
+        if (url.toString().includes("current-balance")) {
+          return {
+            ok: true,
+            json: async () => ({
+              data: [
+                { token_symbol: "ZERO" }, // missing usd_value
+                { token_symbol: "ZERO2", usd_value: 0 }
+              ]
+            })
+          };
+        } else if (url.toString().includes("counterparties")) {
+          return {
+            ok: true,
+            json: async () => ({
+              // empty response (data is undefined)
+            })
+          };
+        }
+      });
+
+      const result = await getExchangeHealth(EXCHANGES[0]);
+      assert.equal(result.totalAssetsUsd, 0);
+      assert.equal(result.topTokens[0].percentage, 0);
+      assert.equal(result.totalInflows24hUsd, 0);
+    });
+
+    it("handles undefined top-level data and undefined inflow/outflow", async () => {
+      mock.method(global, "fetch", async (url: any) => {
+        if (url.toString().includes("current-balance")) {
+          return {
+            ok: true,
+            json: async () => ({}) // missing data array
+          };
+        } else if (url.toString().includes("counterparties")) {
+          return {
+            ok: true,
+            json: async () => ({
+              data: [
+                { inflow_usd: undefined, outflow_usd: undefined }
+              ]
+            })
+          };
+        }
+      });
+
+      const result = await getExchangeHealth(EXCHANGES[0]);
+      assert.equal(result.totalAssetsUsd, 0);
+      assert.equal(result.totalInflows24hUsd, 0);
+      assert.equal(result.totalOutflows24hUsd, 0);
+    });
+
+    it("handles non-Error thrown exceptions", async () => {
+      mock.method(global, "fetch", async () => {
+        throw "String Error";
+      });
+
+      const result = await getExchangeHealth(EXCHANGES[0]);
+      assert.ok(result.error?.includes("String Error"));
+    });
   });
 
   describe("getAllExchangeHealth", () => {
