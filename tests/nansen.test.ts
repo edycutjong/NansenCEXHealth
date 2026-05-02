@@ -43,7 +43,7 @@ describe("Nansen API Client", () => {
     process.env.NANSEN_API_KEY = "test-key";
     
     const mockData = { data: [{ token_symbol: "BTC", usd_value: 50000 }] };
-    mock.method(global, "fetch", async (url: any, options: any) => {
+    mock.method(global, "fetch", async (url: string | URL | Request, options: RequestInit | undefined) => {
       assert.ok(url.toString().includes("/profiler/address/current-balance"));
       assert.equal(options.headers.apiKey, "test-key");
       
@@ -64,7 +64,7 @@ describe("Nansen API Client", () => {
     process.env.NANSEN_API_KEY = "test-key";
     
     const mockData = { data: [{ inflow_usd: 100, outflow_usd: 50 }] };
-    mock.method(global, "fetch", async (url: any, options: any) => {
+    mock.method(global, "fetch", async (url: string | URL | Request, options: RequestInit | undefined) => {
       assert.ok(url.toString().includes("/profiler/address/counterparties"));
       
       const body = JSON.parse(options.body);

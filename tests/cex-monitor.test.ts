@@ -55,7 +55,7 @@ describe("CEX Monitor", () => {
     });
 
     it("fetches and computes exchange health", async () => {
-      mock.method(global, "fetch", async (url: any) => {
+      mock.method(global, "fetch", async (url: string | URL | Request) => {
         if (url.toString().includes("current-balance")) {
           return {
             ok: true,
@@ -93,7 +93,7 @@ describe("CEX Monitor", () => {
     });
 
     it("handles counterparties API failure gracefully", async () => {
-      mock.method(global, "fetch", async (url: any) => {
+      mock.method(global, "fetch", async (url: string | URL | Request) => {
         if (url.toString().includes("current-balance")) {
           return {
             ok: true,
@@ -119,7 +119,7 @@ describe("CEX Monitor", () => {
     });
 
     it("returns error state on balance API failure", async () => {
-      mock.method(global, "fetch", async (url: any) => {
+      mock.method(global, "fetch", async (url: string | URL | Request) => {
         if (url.toString().includes("current-balance")) {
           return {
             ok: false,
@@ -136,7 +136,7 @@ describe("CEX Monitor", () => {
     });
 
     it("handles missing data arrays and default fallbacks", async () => {
-      mock.method(global, "fetch", async (url: any) => {
+      mock.method(global, "fetch", async (url: string | URL | Request) => {
         if (url.toString().includes("current-balance")) {
           return {
             ok: true,
@@ -164,7 +164,7 @@ describe("CEX Monitor", () => {
     });
 
     it("handles undefined top-level data and undefined inflow/outflow", async () => {
-      mock.method(global, "fetch", async (url: any) => {
+      mock.method(global, "fetch", async (url: string | URL | Request) => {
         if (url.toString().includes("current-balance")) {
           return {
             ok: true,
@@ -207,7 +207,7 @@ describe("CEX Monitor", () => {
     });
 
     it("aggregates and sorts multiple exchanges", async () => {
-      mock.method(global, "fetch", async (url: any, options: any) => {
+      mock.method(global, "fetch", async (url: string | URL | Request, options: RequestInit | undefined) => {
         const body = JSON.parse(options.body);
         if (url.toString().includes("current-balance")) {
           if (body.entity_name === "Binance") return { ok: true, json: async () => ({ data: [{ usd_value: 200000 }] }) };
